@@ -48,23 +48,27 @@ function set_session($name, $value){
   }
 
 function check_user_name($user_name){
-    global $err_msg;
     $user_name_regex = '/^[a-zA-Z0-9]{1,50}$/';
     if ($user_name === '') {
-        $err_msg[] = 'ユーザー名を入力してください';
+        set_error('ユーザー名を入力してください');
+        return false;
     } else if (preg_match($user_name_regex, $user_name) !== 1) {
-        $err_msg[] = 'ユーザー名は半角英数字で入力してください';
+        set_error('ユーザー名は半角英数字で入力してください');
+        return false;
     }
+    return true;
 }
 
 function check_password($password) {
-    global $err_msg;
     $password_regex = '/^[a-zA-Z0-9]{6,50}$/';
     if ($password === '') {
-        $err_msg[] = 'パスワードを入力してください';
+        set_error('パスワードを入力してください');
+        return false;
     } else if (preg_match($password_regex, $password) !== 1) {
-        $err_msg[] = 'パスワードは6文字以上の半角英数字で入力してください';
+        set_error('パスワードは6文字以上の半角英数字で入力してください');
+        return false;
     }
+    return true;
 }
 
 function check_add_category($category) {
@@ -87,23 +91,24 @@ function check_delete_category($category_id) {
 }
 
 function get_duplicate_msg($duplicate, $user_name, $password) {
-    global $err_msg;
     if ($duplicate[0]['user_name'] === $user_name) {
-        $err_msg[] = 'このユーザー名はすでに使用されています';
+        set_error('このユーザー名はすでに使用されています');
+        return false;
     }
     if ($duplicate[0]['password'] === $password) {
-        $err_msg[] = 'このパスワードはすでに登録があります';
+        set_error('このパスワードはすでに登録があります');
+        return false;
     }
+    return true;
 }
 
 function set_login_session($user_id) {
-    global $err_msg;
     if (isset($user_id)) {
         $_SESSION['user_id'] = $user_id;
         header('Location:articles_list.php');
         exit;
     } else {
-        $err_msg[] = 'ユーザー名かパスワードが違います';
+        set_error('ユーザー名かパスワードが違います');
     }
 }
 

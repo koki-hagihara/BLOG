@@ -12,15 +12,10 @@ if (is_logined() === false) {
     exit;
 }
 
-$err_msg = array();
-$message = array();
-
 $dbh = get_db_connect();
 $user_id = get_session('user_id');
 $user = get_logined_user($dbh, $user_id);
 checked_user_type($user[0]['user_type']);
-
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['category_delete'])) {

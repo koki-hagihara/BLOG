@@ -7,13 +7,11 @@
         <link rel = "stylesheet" href = "<?php print STYLESHEET_PATH.'login.css';?>">
     </head>
     <body>
-<?php if (count($err_msg) > 0) {
-    foreach ($err_msg as $msg) { ?>
-        <p><?php print $msg;?></p>
-    <?php }
-} ?>
+
+<?php include VIEW_PATH . 'templates/messages.php'; ?>
+
         <h1>メンバーログイン</h1>
-        <form method = "post" action = "login.php">
+        <form method = "post" action = "login_process.php">
             <div>
                 <label for = "user_name">ユーザー名</label>
                 <input type = "text" name = "user_name" placeholder = "ユーザー名" id = "user_name">

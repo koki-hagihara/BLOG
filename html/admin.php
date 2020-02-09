@@ -19,5 +19,4 @@ checked_user_type($user[0]['user_type']);
 
 $category_list = select_category_list($dbh);
 
-
 include_once VIEW_PATH.'admin_view.php';

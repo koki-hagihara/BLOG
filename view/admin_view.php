@@ -12,7 +12,7 @@
 
         <h2>記事カテゴリー編集</h2>
 
-
+<?php include VIEW_PATH . 'templates/messages.php'; ?>
 
         <p>追加したいカテゴリーを入力してください</p>
         <form method = "post" action = "add_category.php">
@@ -27,9 +27,6 @@
 <?php } ?>
             <input type = "submit" name = "category_delete" value = "削除する">
         </form>
-
-
-        <?php include VIEW_PATH . 'templates/messages.php'; ?>
 
 
     </body>

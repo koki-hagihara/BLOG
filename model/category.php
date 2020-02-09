@@ -1,7 +1,6 @@
 <?php
 
 function select_category_list($dbh) {
-    global $err_msg;
     try {
         $sql = '
                 SELECT
@@ -13,7 +12,7 @@ function select_category_list($dbh) {
         $stmt->execute();
         $category_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        $err_msg[] = 'データ取得失敗。理由：'.$e->getMessage();
+        set_error('データ取得失敗。理由：'.$e->getMessage());
     }
     return $category_list;
 }
