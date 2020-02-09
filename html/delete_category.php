@@ -12,12 +12,27 @@ if (is_logined() === false) {
     exit;
 }
 
+$err_msg = array();
+$message = array();
+
 $dbh = get_db_connect();
 $user_id = get_session('user_id');
 $user = get_logined_user($dbh, $user_id);
 checked_user_type($user[0]['user_type']);
 
-$category_list = select_category_list($dbh);
 
 
-include_once VIEW_PATH.'admin_view.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['category_delete'])) {
+        $category_id = get_post_array('category_id');
+
+        check_delete_category($category_id);
+
+        if (count($_SESSION['__errors']) === 0) {
+            delete_category($dbh, $category_id);
+        }
+    }
+}
+
+header('Location:admin.php');
+exit;

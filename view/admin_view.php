@@ -12,20 +12,26 @@
 
         <h2>記事カテゴリー編集</h2>
 
+
+
         <p>追加したいカテゴリーを入力してください</p>
-        <form method = "post" action = "admin.php">
+        <form method = "post" action = "add_category.php">
             <input type = "text" name = "category">
             <input type = "submit" name = "add_category" value = "追加する">
         </form>
-<?php if (count($err_msg) > 0) {
-    foreach ($err_msg as $msg) { ?>
-        <p><?php print $msg ;?>
-    <?php }
-} else if (count($message) > 0) {
-    foreach ($message as $str) { ?>
-        <p><?php print $str ;?>
-    <?php }
-} ?>
+
+        <p>削除したいカテゴリーを選んでください</p>
+        <form method = "post" action = "delete_category.php">
+<?php foreach ($category_list as $category) { ?>
+            <input type = "checkbox" name = "category_id[]" value = "<?php print $category['category_id'] ;?>"><?php print entity_str($category['category']) ;?>
+<?php } ?>
+            <input type = "submit" name = "category_delete" value = "削除する">
+        </form>
+
+
+        <?php include VIEW_PATH . 'templates/messages.php'; ?>
+
 
     </body>
+
 </html>

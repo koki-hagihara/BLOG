@@ -1,8 +1,24 @@
 <?php
 
-function add_category($dbh, $category) {
+function select_category_list($dbh) {
     global $err_msg;
-    global $message;
+    try {
+        $sql = '
+                SELECT
+                category_id, category
+                FROM
+                categories
+                ';
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute();
+        $category_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $err_msg[] = 'データ取得失敗。理由：'.$e->getMessage();
+    }
+    return $category_list;
+}
+
+function add_category($dbh, $category) {
     try {
         $sql = '
                 INSERT INTO 
@@ -14,8 +30,28 @@ function add_category($dbh, $category) {
         $stmt = $dbh->prepare($sql);
         $stmt->bindValue(1, $category, PDO::PARAM_STR);
         $stmt->execute();
-        $message[] = 'カテゴリーの追加が完了しました';
+        set_message('カテゴリーの追加が完了しました');
     } catch (PDOException $e) {
-        $err_msg[] = 'カテゴリー追加できませんでした。理由：'.$e->getMessage();
+        set_error('カテゴリー追加できませんでした。理由：'.$e->getMessage());
+    }
+}
+
+function delete_category($dbh, $category_id) {
+    try {
+        foreach ($category_id as $id) {
+            $sql = '
+                    DELETE
+                    FROM
+                    categories
+                    WHERE
+                    category_id = ?
+                    ';
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(1, $id, PDO::PARAM_INT);
+            $stmt->execute();
+        }
+        set_message('カテゴリーの削除ができました');
+    } catch (PDOException $e) {
+        set_error('カテゴリー削除に失敗しました。理由：'.$e->getMessage());
     }
 }
