@@ -17,7 +17,18 @@ $user_id = get_session('user_id');
 $user = get_logined_user($dbh, $user_id);
 checked_user_type($user[0]['user_type']);
 
-$category_list = select_category_list($dbh);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_category'])) {
+        $category = get_post('category');
+
+        check_add_category($category);
 
 
-include_once VIEW_PATH.'admin_view.php';
+        if (count($_SESSION['__errors']) === 0) {
+            add_category($dbh, $category);
+        }
+    } 
+}
+
+header('Location:admin.php');
+exit;

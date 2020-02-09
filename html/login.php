@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dbh = get_db_connect();
         $user = select_registered_user($dbh, $user_name, $password);
 
-        set_session($user[0]['user_id']);
+        set_login_session($user[0]['user_id']);
     }
 }
 
