@@ -17,6 +17,28 @@ function get_post_array($name) {
     return $array;
 }
 
+function upload_img($name) {
+    $img_filename = '';
+    if (is_uploaded_file($_FILES[$name]['tmp_name']) === TRUE) {
+        $extension = pathinfo($_FILES[$name]['name'], PATHINFO_EXTENSION);
+        if ($extension === 'jpg' || $extension === 'jpeg' || $extension === 'png') {
+            $img_filename = sha1(uniqid(mt_rand(), true)).'.'.$extension;
+            if (is_file(IMAGE_DIR.$img_filename) !== TRUE) {
+                if (move_uploaded_file($_FILES[$name]['tmp_name'], IMAGE_DIR.$img_filename) !== TRUE) {
+                    set_error('ファイルのアップロードに失敗しました');
+                }
+            } else {
+                set_error('ファイルアップロードに失敗しました。再度お試しください');
+            }
+        } else {
+            set_error('ファイル形式が異なります。画像ファイルはJPEGまたはPNGのみ利用可能です');
+        }
+    } else {
+        return $img_filename;
+    }
+    return $img_filename;
+}
+
 function set_error($error){
     $_SESSION['__errors'][] = $error;
   }
@@ -80,13 +102,45 @@ function check_add_category($category) {
 function check_delete_category($category_id) {
     $number_regex = '/^[0-9]+$/';
     if (count($category_id) === 0) {
-        set_error('削除したいカテゴリーを選択してください');
+        set_error('削除するカテゴリーを選択してください');
     } else if (count($category_id) > 0) {
         foreach ($category_id as $id) {
             if (preg_match($number_regex, $id) !== 1) {
                 set_error('不正な選択です');
             }
         }
+    }
+}
+
+function check_post_category($category) {
+    $number_regex = '/^[0-9]+$/';
+    if ($category === '') {
+        set_error('カテゴリーが選択されていません');
+    } else if (preg_match($number_regex, $category) !== 1) {
+        set_error('カテゴリー選択が不正です');
+    }
+}
+
+function check_post_title($title) {
+    if ($title === '') {
+        set_error('記事タイトルを入力してください');
+    } else if (mb_strlen($title) > 30) {
+        set_error('タイトルは30文字以内で入力してください');
+    }
+}
+
+function check_post_article($article) {
+    if ($article === '') {
+        set_error('記事を入力してください');
+    } else if (mb_strlen($article) > 2000) {
+        set_error('記事は2000字以内で入力してください');
+    }
+}
+
+function checked_user_type($user_type) {
+    if ($user_type !== 0) {
+        header('Location:logout.php');
+        exit;
     }
 }
 

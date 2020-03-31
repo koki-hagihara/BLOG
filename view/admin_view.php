@@ -28,7 +28,7 @@
             <input type = "submit" name = "category_delete" value = "削除する">
         </form>
 
-
+        <a href = "write_article_page.php">記事作成へ</a>
     </body>
 
 </html>

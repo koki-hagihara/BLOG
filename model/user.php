@@ -88,9 +88,3 @@ function get_logined_user($dbh, $user_id) {
     return $user;
 }
 
-function checked_user_type($user_type) {
-    if ($user_type !== 0) {
-        header('Location:logout.php');
-        exit;
-    }
-}
